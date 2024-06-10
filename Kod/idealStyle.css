@@ -1,0 +1,15 @@
+.przycisk-do-pobierania-obrazów {
+	background-size: contain;
+	background-repeat: no-repeat;
+	position: fixed;
+	cursor: pointer;
+	opacity: 0.15;
+	z-index: 2147483647;
+	display: none;
+	&:hover {
+		opacity: 0.30;
+	}
+	&.kursor-nad-obrazem { display: block; }
+	&.zły-rozmiar, &.nie-pokazuj-przycisku { display: none; }
+	.klawisz-kontrol &.kursor-nad-obrazem { display: block; }
+}

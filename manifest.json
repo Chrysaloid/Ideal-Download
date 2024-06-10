@@ -1,0 +1,25 @@
+{
+	"manifest_version": 3,
+	"name": "Ideal Download",
+	"version": "1.0.0",
+	"description": "Puts button on images that when clicked downloads the image",
+	"author": "Fryderyk Kukowski",
+	"icons": {"16": "Kod/icon_16.png", "32": "Kod/icon_32.png", "48": "Kod/icon_48.png", "128": "Kod/icon_128.png"},
+	"content_scripts": [
+		{
+			"matches": ["<all_urls>"],
+			"js": ["Kod/idealShared.js","Konfiguracja.js","Kod/idealScript.js"],
+			"css": ["Kod/idealStyle.css"],
+			"run_at": "document_end"
+		}
+	],
+	"background": {"service_worker": "Kod/idealBackground.js"},
+	"web_accessible_resources": [
+		{
+			"matches": ["<all_urls>"],
+			"resources": ["Kod/icon_128.png"]
+		}
+	],
+	"permissions": ["scripting", "nativeMessaging", "downloads", "webRequest"],
+	"host_permissions": ["<all_urls>"]
+}
