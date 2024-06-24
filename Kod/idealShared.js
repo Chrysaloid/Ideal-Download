@@ -22,9 +22,9 @@ function getFileNameFromPathname(src) {
 			return [fileName, pos];
 		}
 	} catch (err) {
-		console.warn("URL Parse Error: " + err);
-		return [null];
+		console.log("URL Parse Error: " + err);
 	}
+	return [null];
 }
 function getNameFromFileName(fileName, pos) {
 	return fileName.slice(0, pos);
@@ -35,6 +35,14 @@ function getExtFromFileName(fileName, pos) {
 function modifyDataUrl(dataUrl, val) {
 	dataUrl.dataUrl = "data:image/" + val + dataUrl.dataUrl.slice(dataUrl.dataUrl.indexOf(";"));
 }
+// async function isWebpAnimated(resp) {
+// 	const data = await resp.text();
+// 	if (data.indexOf("ANMF") !== -1) {
+// 		return true;
+// 	} else {
+// 		return false;
+// 	}
+// }
 function determineFileName(dataUrl, obj) {
 	// debugger;
 	let fileName, pos;
@@ -51,6 +59,8 @@ function determineFileName(dataUrl, obj) {
 
 	nazwa += (() => { // extension
 		const imgForm = (() => {
+			// Sample data URL
+			// data:image/jpeg;base64,bvjsb9ouywerthbb
 			let dUrl = dataUrl.dataUrl;
 			if (dUrl !== undefined) {
 				let dataIdx = dUrl.indexOf(",");
@@ -69,7 +79,7 @@ function determineFileName(dataUrl, obj) {
 				[fileName, pos] = getFileNameFromPathname(obj.imgSrc);
 				if (fileName !== null) return getExtFromFileName(fileName, pos);
 			}
-			return "png";
+			// return "png";
 		})();
 		/* eslint-disable */
 		if (obj.altKey) {
