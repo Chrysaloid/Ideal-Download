@@ -9,7 +9,7 @@ function handleDataUrl(dataUrl, req) {
 	});
 }
 
-chrome.runtime.onMessage.addListener(function (req, sender, sendResp) {
+chrome.runtime.onMessage.addListener(async function (req, sender, sendResp) {
 	if (req.closeThis) {
 		chrome.tabs.remove(sender.tab.id);
 	} else {
@@ -50,12 +50,14 @@ chrome.runtime.onMessage.addListener(function (req, sender, sendResp) {
 		if (req.czyPobrać) { // eslint-disable-line no-lonely-if
 			sendResp(handleDataUrl({ dataUrl: req.dataUrl }, req));
 		} else {
-			fetch(req.imgSrc)
-			.then(response => response.blob())
-			.then(blobToBase64)
-			.then(dataUrl => handleDataUrl({ dataUrl }, req))
-			.then(downloadId => sendResp(downloadId))
-			.catch();
+			const resp = await fetch(req.imgSrc);
+			respOK(resp);
+			const blob = await resp.clone().blob();
+			req.blobType = blob.type; // eslint-disable-line require-atomic-updates
+			req.czyWebpAnim = blob.type === "image/webp" && await isWebpAnimated(resp); // eslint-disable-line require-atomic-updates
+			const dataUrl = await blobToBase64(blob);
+			const downloadId = await handleDataUrl({ dataUrl }, req);
+			sendResp(downloadId);
 		}
 	}
 

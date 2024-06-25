@@ -9,6 +9,9 @@
 	&:hover {
 		opacity: 0.30;
 	}
+	&:active {
+		filter: invert(1);
+	}
 	&.kursor-nad-obrazem { display: block; }
 	&.zły-rozmiar, &.nie-pokazuj-przycisku { display: none; }
 	.klawisz-kontrol &.kursor-nad-obrazem { display: block; }

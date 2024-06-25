@@ -35,19 +35,26 @@ function getExtFromFileName(fileName, pos) {
 function modifyDataUrl(dataUrl, val) {
 	dataUrl.dataUrl = "data:image/" + val + dataUrl.dataUrl.slice(dataUrl.dataUrl.indexOf(";"));
 }
-// async function isWebpAnimated(resp) {
-// 	const data = await resp.text();
-// 	if (data.indexOf("ANMF") !== -1) {
-// 		return true;
-// 	} else {
-// 		return false;
-// 	}
-// }
+function respOK(resp) {
+	if (resp.ok) {
+		return resp;
+	} else {
+		throw new Error("Network response was not ok");
+	}
+}
+async function isWebpAnimated(resp) {
+	const buffer = new Uint8Array(await resp.arrayBuffer());
+	if (new TextDecoder().decode(buffer.subarray(12, 16)) === "VP8X") {
+		return Boolean((buffer[20] >> 1) & 1);
+	}
+	return false;
+}
 function determineFileName(dataUrl, obj) {
 	// debugger;
-	let fileName, pos;
+	let fileName, pos, altOrTitle;
 	let nazwa = (() => {
-		const trimAlt = obj.imgAlt.trim(); if (trimAlt.length) return trimAlt;
+		altOrTitle = obj.imgAlt.trim();   if (altOrTitle.length) return altOrTitle;
+		altOrTitle = obj.imgTitle.trim(); if (altOrTitle.length) return altOrTitle;
 
 		[fileName, pos] = getFileNameFromPathname(obj.imgSrc);
 		if (fileName !== null) return getNameFromFileName(fileName, pos);
@@ -59,45 +66,31 @@ function determineFileName(dataUrl, obj) {
 
 	nazwa += (() => { // extension
 		const imgForm = (() => {
-			// Sample data URL
-			// data:image/jpeg;base64,bvjsb9ouywerthbb
-			let dUrl = dataUrl.dataUrl;
-			if (dUrl !== undefined) {
-				let dataIdx = dUrl.indexOf(",");
-				if (dataIdx !== -1) {
-					dUrl = dUrl.slice(0, dataIdx);
-					dataIdx = dUrl.indexOf("image/");
-					if (dataIdx !== -1) {
-						//// 11 == 5 + 6 == dataUrl.indexOf("image/") + "image/".length
-						// 6 == "image/".length
-						return dUrl.slice(dataIdx + 6, dUrl.indexOf(";"));
-					}
-				}
+			if (obj.czyWebpAnim) return "webpAnim";
+			if (obj.blobType !== undefined && obj.blobType.startsWith("image/")) {
+				// 6 === "image/".length
+				return obj.blobType.slice(6);
 			}
 			if (fileName !== null) {
 				if (fileName !== undefined) return getExtFromFileName(fileName, pos);
 				[fileName, pos] = getFileNameFromPathname(obj.imgSrc);
 				if (fileName !== null) return getExtFromFileName(fileName, pos);
 			}
-			// return "png";
 		})();
 		/* eslint-disable */
-		if (obj.altKey) {
-			switch (imgForm) {
-				case "jpeg"   : { modifyDataUrl(dataUrl, "png" ); return ".png" };
-				case "png"    : { modifyDataUrl(dataUrl, "jpeg"); return ".jpg" };
-				case "gif"    : { modifyDataUrl(dataUrl, "png" ); return ".png" };
-				case "svg+xml": { modifyDataUrl(dataUrl, "png" ); return ".png" };
-				default       : { modifyDataUrl(dataUrl, "jpeg"); return ".jpg" };
-			}
-		} else {
-			switch (imgForm) {
-				case "jpeg"   : {                                return ".jpg" };
-				case "png"    : {                                return ".png" };
-				case "gif"    : {                                return ".gif" };
-				case "svg+xml": {                                return ".svg" };
-				default       : { modifyDataUrl(dataUrl, "png"); return ".png" };
-			}
+		switch (imgForm) {
+			case "jpeg"    : return obj.altKey ? ".png"  : ".jpg";
+			case "png"     : return obj.altKey ? ".jpg"  : ".png";
+			case "gif"     : return obj.altKey ? ".apng" : ".gif";
+			default        :
+			case "webp"    : if (obj.altKey) { modifyDataUrl(dataUrl, "jpeg"); return ".jpg" } else { modifyDataUrl(dataUrl, "png" ); return ".png" }
+			case "webpAnim":
+			case "apng"    : if (obj.altKey) { modifyDataUrl(dataUrl, "apng"); return ".apng" } else { modifyDataUrl(dataUrl, "gif" ); return ".gif" }
+			case "jfif"    :
+			case "bmp"     :
+			case "heic"    :
+			case "tiff"    : if (obj.altKey) { modifyDataUrl(dataUrl, "png"); return ".png" } else { modifyDataUrl(dataUrl, "jpeg" ); return ".jpg" }
+			case "svg+xml" : return ".svg";
 		}
 		/* eslint-enable */
 	})();

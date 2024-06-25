@@ -48,11 +48,13 @@ if (czy_wyłączyć_rozszerzenie === false && document.documentElement.tagName =
 		// Inne rozwiązanie 3
 		try {
 			const resp = await fetch(img.src);
-			const blob = await resp.blob();
+			respOK(resp);
+			const blob = await resp.clone().blob();
 			const dataUrl = await blobToBase64(blob);
 			return chrome.runtime.sendMessage({
 				imgSrc: img.src,
 				imgAlt: img.alt,
+				imgTitle: img.title,
 				altKey: altKey,
 				czyPobrać: true,
 				dataUrl: dataUrl,
@@ -63,6 +65,7 @@ if (czy_wyłączyć_rozszerzenie === false && document.documentElement.tagName =
 			return chrome.runtime.sendMessage({
 				imgSrc: img.src,
 				imgAlt: img.alt,
+				imgTitle: img.title,
 				altKey: altKey,
 				czyPobrać: false,
 			});
@@ -108,7 +111,7 @@ if (czy_wyłączyć_rozszerzenie === false && document.documentElement.tagName =
 	// #region //* HTML escape policy
 	let escapeHTMLPolicy;
 	if (window.trustedTypes && trustedTypes.createPolicy) {
-		escapeHTMLPolicy = trustedTypes.createPolicy("myEscapePolicy", {
+		escapeHTMLPolicy = trustedTypes.createPolicy("safeInnerHtml", {
 			createHTML: str => str,
 		});
 	}
@@ -131,7 +134,6 @@ if (czy_wyłączyć_rozszerzenie === false && document.documentElement.tagName =
 		// console.log("przycisk");
 		if (imageOK()) {
 			await downloadImg(currImg, e.altKey);
-			// console.log(await downloadImg(currImg, e.altKey));
 			// if (singleImageSite) window.close(); // Nie działa bo "Scripts may close only the windows that were opened by them."
 			if (singleImageSite) chrome.runtime.sendMessage({ closeThis: true });
 		}
