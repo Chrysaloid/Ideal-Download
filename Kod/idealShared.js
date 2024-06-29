@@ -62,7 +62,7 @@ function determineFileName(dataUrl, obj) {
 		dateFormatter ??= getDateFormatter();
 
 		return "Unknown " + dateFormatter.format(new Date()).replaceAll(":", "꞉");
-	})().trim().replaceAll(/[/:*?"<>|\n\r]/gm, "_");
+	})().trim().replaceAll(/[\\\/:*?"<>|\n\r]/gm, "_"); // eslint-disable-line no-useless-escape
 
 	nazwa += (() => { // extension
 		const imgForm = (() => {
