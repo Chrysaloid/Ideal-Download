@@ -48,7 +48,7 @@ chrome.runtime.onMessage.addListener(async function (req, sender, sendResp) {
 
 		// Inne rozwiązanie 3
 		if (req.czyPobrać) { // eslint-disable-line no-lonely-if
-			sendResp(handleDataUrl({ dataUrl: req.dataUrl }, req));
+			sendResp(await handleDataUrl({ dataUrl: req.dataUrl }, req));
 		} else {
 			const resp = await fetch(req.imgSrc);
 			respOK(resp);
