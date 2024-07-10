@@ -144,7 +144,7 @@ let obejście_długości_nawigacji = hostIncludes(["e926.net", "e621.net"]);
 	Należy jej przynajmniej spróbować gdy domyślna metoda (bazująca na mouseenter i mouseleave) nie działa.
 	mouseenter i mouseleave nie działają jeżeli obraz jest przykryty jakimś innym elementem.
 */
-let użyj_metody_mousemove = host(["allegro.pl"]);
+let użyj_metody_mousemove = host(["allegro.pl", "www.instagram.com"]);
 
 /*
 	Zmienianie wartości domyślnych dla konkretnych stron. Domyślnie nie zmienione.
