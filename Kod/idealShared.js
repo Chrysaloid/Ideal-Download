@@ -57,7 +57,7 @@ function determineFileName(dataUrl, obj) {
 		altOrTitle = obj.imgTitle.trim(); if (altOrTitle.length) return altOrTitle;
 
 		[fileName, pos] = getFileNameFromPathname(obj.imgSrc);
-		if (fileName !== null) return getNameFromFileName(fileName, pos);
+		if (fileName !== null && fileName !== "") return getNameFromFileName(fileName, pos);
 
 		dateFormatter ??= getDateFormatter();
 
