@@ -109,14 +109,18 @@ if (czy_wyłączyć_rozszerzenie === false && document.documentElement.tagName =
 		}
 	}
 	// #region //* HTML escape policy
-	let escapeHTMLPolicy;
-	if (window.trustedTypes && trustedTypes.createPolicy) {
-		escapeHTMLPolicy = trustedTypes.createPolicy("safeInnerHtml", {
-			createHTML: str => str,
-		});
-	}
-	function createHTML(str) {
-		return escapeHTMLPolicy.createHTML(str);
+	let escapeHTMLPolicy, createHTML;
+	try {
+		if (!host("teams.microsoft.com") && window?.trustedTypes?.createPolicy) {
+			escapeHTMLPolicy = trustedTypes.createPolicy("safeInnerHtml", {
+				createHTML: str => str,
+			});
+			createHTML = str => escapeHTMLPolicy.createHTML(str);
+		} else {
+			throw new Error("Wystąpił błąd");
+		}
+	} catch (e) {
+		createHTML = str => str;
 	}
 	function appendHTML(elem, htmlString) {
 		const t = document.createElement("template");

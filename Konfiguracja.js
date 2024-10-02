@@ -95,11 +95,11 @@ let pozycja_przycisku = [
 
 	Przykładowe wartości:
 	let czy_wyłączyć_rozszerzenie = false; // Domyślnie
-	let czy_wyłączyć_rozszerzenie = host(["example.com"]);
-	let czy_wyłączyć_rozszerzenie = host(["example1.com","example2.com"]); // Czytać jako: "Wyłączyć rozszerzenie gdy domena strony równa jest dowolnej z wartości w wektorze"
-	let czy_wyłączyć_rozszerzenie = hostIncludes(["example.com"]);
-	let czy_wyłączyć_rozszerzenie = hostIncludes(["example1.com","example2.com"]); // Czytać jako: "Gdy domena strony zawiera dowolną z wartość z wektorze"
-	let czy_wyłączyć_rozszerzenie = host(["example1.com","example2.com"]) || hostIncludes(["example1.com","example2.com"]);
+	let czy_wyłączyć_rozszerzenie = host("example.com");
+	let czy_wyłączyć_rozszerzenie = host("example1.com","example2.com"); // Czytać jako: "Wyłączyć rozszerzenie gdy domena strony równa jest dowolnej z wartości w wektorze"
+	let czy_wyłączyć_rozszerzenie = hostIncludes("example.com");
+	let czy_wyłączyć_rozszerzenie = hostIncludes("example1.com","example2.com"); // Czytać jako: "Gdy domena strony zawiera dowolną z wartość z wektorze"
+	let czy_wyłączyć_rozszerzenie = host("example1.com","example2.com") || hostIncludes("example1.com","example2.com");
 	let czy_wyłączyć_rozszerzenie = /example/.test(window.location.hostname); // RegEx
 	let czy_wyłączyć_rozszerzenie = new URL(window.location.href).searchParams.has("abc"); // wśród parametrów wyszukiwania jest "abc"
 	let czy_wyłączyć_rozszerzenie = new URL(window.location.href).searchParams.get("abc") === "value"; // parametr wyszukiwania "abc" jest równy "value"
@@ -116,13 +116,13 @@ let czy_wyłączyć_rozszerzenie = false;
 
 	Przykładowe wartości:
 	let automatyczne_zamykanie_kart = true; // Domyślnie
-	let automatyczne_zamykanie_kart = host(["example1.com","example2.com"]); // Czytać jako: "Karta zostanie automatycznie zamknięta gdy domena strony równa jest dowolnej z wartości w wektorze" (whitelist)
+	let automatyczne_zamykanie_kart = host("example1.com","example2.com"); // Czytać jako: "Karta zostanie automatycznie zamknięta gdy domena strony równa jest dowolnej z wartości w wektorze" (whitelist)
 	Inne określenie na whitelist w tym przypadku może być "Automatycznie zamknięte zostaną tylko konkretne domeny"
 
-	let automatyczne_zamykanie_kart = !(host(["example1.com","example2.com"])); // Czytać jako: "Karta zostanie automatycznie zamknięta gdy domeny strony nie ma w wektorze" (blacklist)
+	let automatyczne_zamykanie_kart = !(host("example1.com","example2.com")); // Czytać jako: "Karta zostanie automatycznie zamknięta gdy domeny strony nie ma w wektorze" (blacklist)
 	Inne określenie na blacklist w tym przypadku może być "Automatycznie zamknięte zostaną wszystkie domeny oprócz konkretnych"
 
-	let automatyczne_zamykanie_kart = !(hostIncludes(["example1.com","example2.com"])); // Czytać jako: "Domena nie może zawierać żadnej z wartości aby zostać zamknięta"
+	let automatyczne_zamykanie_kart = !(hostIncludes("example1.com","example2.com")); // Czytać jako: "Domena nie może zawierać żadnej z wartości aby zostać zamknięta"
 */
 let automatyczne_zamykanie_kart = true;
 
@@ -135,16 +135,16 @@ let automatyczne_zamykanie_kart = true;
 
 	Przykładowe wartości:
 	let obejście_długości_nawigacji = false; // Domyślnie
-	let obejście_długości_nawigacji = host(["example1.com","example2.com"]); // Czytać jako: "Obejście długości nawigacji nastąpi gdy domena strony równa jest dowolnej z wartości w wektorze" (whitelist)
+	let obejście_długości_nawigacji = host("example1.com","example2.com"); // Czytać jako: "Obejście długości nawigacji nastąpi gdy domena strony równa jest dowolnej z wartości w wektorze" (whitelist)
 */
-let obejście_długości_nawigacji = hostIncludes(["e926.net", "e621.net"]);
+let obejście_długości_nawigacji = hostIncludes("e926.net", "e621.net");
 
 /*
 	Jeżeli ustawione na true to zostanie użyta bardziej wymagająca obliczeniowo metoda mousemove która wysyła event wiele razy na sekundę gdy rusza się mysz.
 	Należy jej przynajmniej spróbować gdy domyślna metoda (bazująca na mouseenter i mouseleave) nie działa.
 	mouseenter i mouseleave nie działają jeżeli obraz jest przykryty jakimś innym elementem.
 */
-let użyj_metody_mousemove = host(["allegro.pl", "www.instagram.com"]);
+let użyj_metody_mousemove = host("allegro.pl", "www.instagram.com");
 
 /*
 	Zmienianie wartości domyślnych dla konkretnych stron. Domyślnie nie zmienione.
@@ -153,7 +153,7 @@ let użyj_metody_mousemove = host(["allegro.pl", "www.instagram.com"]);
 	Możliwości detekcji stron takie same jak w przypadku głównego wyłącznika.
 	Poniższy kod należy skopiować poza komentarz i tam go edytować.
 
-	if (host(["example1.com"])) {
+	if (host("example1.com")) {
 		rozmiar_przycisku = 30;
 		minimalny_rozmiar_obrazu = 80;
 		pozycja_przycisku = [
@@ -164,11 +164,11 @@ let użyj_metody_mousemove = host(["allegro.pl", "www.instagram.com"]);
 		czy_wyłączyć_rozszerzenie = true; // No, jak się da to jako true to nie ma sensu czegokolwiek innego pisać, ale zostawiam dla pokazu
 		automatyczne_zamykanie_kart = false;
 		obejście_długości_nawigacji = true;
-	} else if (host(["example2.com"])) {
+	} else if (host("example2.com")) {
 		// ...
 	}
 */
-// if (host(["allegro.pl"])) {
+// if (host("allegro.pl")) {
 // 	pozycja_przycisku = [
 // 		0, 1, 0,
 // 		0, 0, 0,
@@ -184,12 +184,12 @@ let użyj_metody_mousemove = host(["allegro.pl", "www.instagram.com"]);
 	Poniższy kod należy skopiować poza komentarz i tam go edytować.
 
 	let selektor_CSSowy;
-	if (host(["example1.com"])) {
+	if (host("example1.com")) {
 		selektor_CSSowy = `
 			img.jakaś-klasa,
 			img:not([jakiś-atrybut])
 		`;
-	} else if (host(["example2.com"])) {
+	} else if (host("example2.com")) {
 		// działanie jak whitelist
 		selektor_CSSowy = `
 			img:not(
@@ -197,7 +197,7 @@ let użyj_metody_mousemove = host(["allegro.pl", "www.instagram.com"]);
 				img[inny-atrybut]
 			)
 		`;
-	} else if (host(["example3.com"])) {
+	} else if (host("example3.com")) {
 		// ...
 	}
 	document.querySelectorAll(selektor_CSSowy).forEach(elem => elem.classList.add("nie-pokazuj-przycisku"));

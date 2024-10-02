@@ -109,7 +109,7 @@ function blobToBase64(blob) {
 	});
 }
 const hostname = typeof window !== "undefined" && window.location.hostname;
-function host(strList) {
+function host(...strList) {
 	for (const daElem of strList) {
 		if (hostname === daElem) {
 			return true;
@@ -117,7 +117,7 @@ function host(strList) {
 	}
 	return false;
 }
-function hostIncludes(strList) {
+function hostIncludes(...strList) {
 	for (const daElem of strList) {
 		if (hostname.includes(daElem)) {
 			return true;
