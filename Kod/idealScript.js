@@ -129,7 +129,7 @@ if (czy_wyłączyć_rozszerzenie === false && document.documentElement.tagName =
 	}
 	// #endregion
 
-	const singleImageSite = (automatyczne_zamykanie_kart && (obejście_długości_nawigacji || history.length === 1) && document.querySelector(`body>img:only-child`) !== null);
+	const singleImageSite = (automatyczne_zamykanie_kart && (obejście_długości_nawigacji || history.length === 1 || (history.length === 2 && document.referrer === "")) && document.querySelector(`body>img:only-child`) !== null);
 	przycisk = appendHTML(document.body, `<div class="przycisk-do-pobierania-obrazów" style="background-image: url('${chrome.runtime.getURL("Kod/icon_128.png").trim()}'); width: ${rozmiar_przycisku}px; height: ${rozmiar_przycisku}px;" title="Pobierz image"></div>`);
 	przycisk.addEventListener("mouseleave", e => { if (e.toElement !== currImg) { przycisk.classList.remove("kursor-nad-obrazem", "zły-rozmiar") } });
 	przycisk.addEventListener("click", async e => {
