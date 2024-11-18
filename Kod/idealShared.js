@@ -39,7 +39,7 @@ function respOK(resp) {
 	if (resp.ok) {
 		return resp;
 	} else {
-		throw new Error("Network response was not ok");
+		throw new Error(`Error occurred while downloading image. Network response was not OK. Status: ${resp.status}`);
 	}
 }
 async function isWebpAnimated(resp) {

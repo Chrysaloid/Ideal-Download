@@ -137,7 +137,11 @@ if (czy_wyłączyć_rozszerzenie === false && document.documentElement.tagName =
 		e.stopPropagation();
 		// console.log("przycisk");
 		if (imageOK()) {
-			await downloadImg(currImg, e.altKey);
+			const possibleError = await downloadImg(currImg, e.altKey); // downloadId
+			if (typeof possibleError === "string") { // error occurred, alt: !Number.isFinite(possibleError)
+				alert(possibleError);
+				return;
+			}
 			// if (singleImageSite) window.close(); // Nie działa bo "Scripts may close only the windows that were opened by them."
 			if (singleImageSite) chrome.runtime.sendMessage({ closeThis: true });
 		}
