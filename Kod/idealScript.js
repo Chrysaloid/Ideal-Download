@@ -221,8 +221,8 @@ if (czy_wyłączyć_rozszerzenie === false && document.documentElement.tagName =
 
 			przycisk.classList.remove("kursor-nad-obrazem", "zły-rozmiar");
 			const elemArr = document.elementsFromPoint(e.clientX, e.clientY);
-			for (let i = 0; i < elemArr.length; i++) {
-				if (elemArr[i] instanceof HTMLImageElement) {
+			for (let i = 0; i < elemArr.length; i++) { // Image did not fail to load
+				if (elemArr[i].tagName === "IMG" && (this.naturalWidth > 0 || !this.complete)) {
 					currImg = elemArr[i];
 					const imgRect = setPrzyciskPosition();
 					if (imgRect.width < minimalny_rozmiar_obrazu && imgRect.height < minimalny_rozmiar_obrazu) przycisk.classList.add("zły-rozmiar");
@@ -235,8 +235,8 @@ if (czy_wyłączyć_rozszerzenie === false && document.documentElement.tagName =
 			document.removeEventListener("scroll", setPrzyciskPosition);
 		});
 	} else {
-		function imgEnter(e) {
-			if (e.fromElement === przycisk && this === currImg) return;
+		function imgEnter(e) { //                                  Image failed to load
+			if ((e.fromElement === przycisk && this === currImg) || (this.naturalWidth === 0 && this.complete)) return;
 			currImg = this;
 			const imgRect = setPrzyciskPosition();
 			if (imgRect.width < minimalny_rozmiar_obrazu && imgRect.height < minimalny_rozmiar_obrazu) przycisk.classList.add("zły-rozmiar");
@@ -256,11 +256,12 @@ if (czy_wyłączyć_rozszerzenie === false && document.documentElement.tagName =
 
 		document.querySelectorAll(`img`).forEach(przygotujObraz);
 
-		new MutationObserver((mutRecArr, mutObs) => {
+		new MutationObserver(mutRecArr => {
 			mutRecArr.forEach(mutRec => {
 				mutRec.addedNodes.forEach(node => {
 					if (node.tagName === "IMG") { przygotujObraz(node); return }
-					node.querySelectorAll?.(`img`).forEach(przygotujObraz);
+					if (node.tagName === undefined) return; // node is a Node and not an Element
+					node.querySelectorAll(`img`).forEach(przygotujObraz);
 				});
 			});
 		}).observe(document.body, { childList: true, subtree: true });
