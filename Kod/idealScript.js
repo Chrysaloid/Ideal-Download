@@ -108,29 +108,12 @@ if (czy_wyłączyć_rozszerzenie === false && document.documentElement.tagName =
 			return false;
 		}
 	}
-	// #region //* HTML escape policy
-	let escapeHTMLPolicy, createHTML;
-	try {
-		if (!host("teams.microsoft.com") && window?.trustedTypes?.createPolicy) {
-			escapeHTMLPolicy = trustedTypes.createPolicy("safeInnerHtml", {
-				createHTML: str => str,
-			});
-			createHTML = str => escapeHTMLPolicy.createHTML(str);
-		} else {
-			throw new Error("Wystąpił błąd");
-		}
-	} catch (e) {
-		createHTML = str => str;
-	}
-	function appendHTML(elem, htmlString) {
-		const t = document.createElement("template");
-		t.innerHTML = createHTML(htmlString);
-		return elem.appendChild(t.content.firstElementChild);
-	}
-	// #endregion
 
 	const singleImageSite = (automatyczne_zamykanie_kart && (obejście_długości_nawigacji || history.length === 1 || (history.length === 2 && document.referrer === "")) && document.querySelector(`body>img:only-child`) !== null);
-	przycisk = appendHTML(document.body, `<div class="przycisk-do-pobierania-obrazów" style="background-image: url('${chrome.runtime.getURL("Kod/icon_128.png").trim()}'); width: ${rozmiar_przycisku}px; height: ${rozmiar_przycisku}px;" title="Pobierz image"></div>`);
+	przycisk = document.createElement("div");
+	przycisk.classList.add("przycisk-do-pobierania-obrazów");
+	przycisk.setAttribute("style", `background-image: url('${chrome.runtime.getURL("Kod/icon_128.png").trim()}'); width: ${rozmiar_przycisku}px; height: ${rozmiar_przycisku}px;`);
+	przycisk.setAttribute("title", "Download image");
 	przycisk.addEventListener("mouseleave", e => { if (e.toElement !== currImg) { przycisk.classList.remove("kursor-nad-obrazem", "zły-rozmiar") } });
 	przycisk.addEventListener("click", async e => {
 		// debugger;
@@ -146,6 +129,7 @@ if (czy_wyłączyć_rozszerzenie === false && document.documentElement.tagName =
 			if (singleImageSite) chrome.runtime.sendMessage({ closeThis: true });
 		}
 	});
+	document.body.appendChild(przycisk);
 
 	// #region //* setPrzyciskPosition
 	/* eslint-disable */
