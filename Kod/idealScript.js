@@ -71,6 +71,8 @@ if (czy_wyłączyć_rozszerzenie === false && document.documentElement.tagName =
 			});
 		}
 	}
+	HTMLCollection.prototype.forEach = Array.prototype.forEach;
+	NodeList.prototype.forEach = Array.prototype.forEach;
 
 	/*
 	0 1 2
@@ -238,14 +240,14 @@ if (czy_wyłączyć_rozszerzenie === false && document.documentElement.tagName =
 			img.addEventListener("mouseleave", imgLeave);
 		}
 
-		document.querySelectorAll(`img`).forEach(przygotujObraz);
+		document.body.getElementsByTagName("img").forEach(przygotujObraz);
 
 		new MutationObserver(mutRecArr => {
 			mutRecArr.forEach(mutRec => {
 				mutRec.addedNodes.forEach(node => {
 					if (node.tagName === "IMG") { przygotujObraz(node); return }
 					if (node.tagName === undefined) return; // node is a Node and not an Element
-					node.querySelectorAll(`img`).forEach(przygotujObraz);
+					node.getElementsByTagName("img").forEach(przygotujObraz);
 				});
 			});
 		}).observe(document.body, { childList: true, subtree: true });
