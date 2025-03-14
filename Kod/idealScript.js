@@ -1,7 +1,11 @@
 "use strict";
+/// <reference path="../Konfiguracja.js"/>
+(() => {
+	if (czy_wyłączyć_rozszerzenie || document.documentElement.tagName !== "HTML") return;
 
-if (czy_wyłączyć_rozszerzenie === false && document.documentElement.tagName === "HTML") {
-	let currImg, pozycja_przycisku_idx, przycisk;
+	let currImg, przycisk, singleImage, singleImageSite;
+	HTMLCollection.prototype.forEach = Array.prototype.forEach;
+	NodeList.prototype.forEach = Array.prototype.forEach;
 	function downloadHelper(href, fileName) {
 		/* Old
 		const a = document.createElement("a");
@@ -71,8 +75,6 @@ if (czy_wyłączyć_rozszerzenie === false && document.documentElement.tagName =
 			});
 		}
 	}
-	HTMLCollection.prototype.forEach = Array.prototype.forEach;
-	NodeList.prototype.forEach = Array.prototype.forEach;
 
 	/*
 	0 1 2
@@ -96,13 +98,11 @@ if (czy_wyłączyć_rozszerzenie === false && document.documentElement.tagName =
 		if (currImg.src.trim().length !== 0) {
 			return true;
 		} else {
-			for (let i = 0; i < getPoint.length; i++) {
-				// const point = getPoint[i](przycisk.getBoundingClientRect());
-				const elemArr = document.elementsFromPoint(...getPoint[i](przycisk.getBoundingClientRect()));
-				for (let j = 0; j < elemArr.length; j++) {
-					const elemArri = elemArr[j];
-					if (elemArri instanceof HTMLImageElement && elemArri.src.trim().length !== 0) {
-						currImg = elemArri;
+			for (const point of getPoint) {
+				const elemArr = document.elementsFromPoint(...point(przycisk.getBoundingClientRect()));
+				for (const elem of elemArr) {
+					if (elem instanceof HTMLImageElement && elem.src.trim().length !== 0) {
+						currImg = elem;
 						return true;
 					}
 				}
@@ -110,26 +110,38 @@ if (czy_wyłączyć_rozszerzenie === false && document.documentElement.tagName =
 			return false;
 		}
 	}
+	async function downloadImgOuter(altKey = false) {
+		if (imageOK()) {
+			const possibleError = await downloadImg(currImg, altKey); // downloadId
+			if (typeof possibleError === "string") { // error occurred, alt: !Number.isFinite(possibleError)
+				alert(possibleError);
+				return false;
+			}
+			// if (singleImageSite) window.close(); // Nie działa bo "Scripts may close only the windows that were opened by them."
+			if (singleImageSite) chrome.runtime.sendMessage({ closeThis: true });
+			return true;
+		} else {
+			return false;
+		}
+	}
 
-	const singleImageSite = (automatyczne_zamykanie_kart && (obejście_długości_nawigacji || history.length === 1 || (history.length === 2 && document.referrer === "")) && document.querySelector(`body>img:only-child`) !== null);
+	singleImageSite = (
+		automatyczne_zamykanie_kart &&
+		(obejście_długości_nawigacji || history.length === 1 || (history.length === 2 && document.referrer === "")) && // nowa karta
+		(singleImage = document.querySelector(`body>img:only-child`)) !== null
+	);
+	if (singleImageSite && automatyczne_pobieranie_w_nowej_karcie) {
+		currImg = singleImage;
+		if (downloadImgOuter()) return;
+	}
 	przycisk = document.createElement("div");
 	przycisk.classList.add("przycisk-do-pobierania-obrazów");
 	przycisk.setAttribute("style", `background-image: url('${chrome.runtime.getURL("Kod/icon_128.png").trim()}'); width: ${rozmiar_przycisku}px; height: ${rozmiar_przycisku}px;`);
 	przycisk.setAttribute("title", "Download image");
 	przycisk.addEventListener("mouseleave", e => { if (e.toElement !== currImg) { przycisk.classList.remove("kursor-nad-obrazem", "zły-rozmiar") } });
-	przycisk.addEventListener("click", async e => {
-		// debugger;
+	przycisk.addEventListener("click", e => {
 		e.stopPropagation();
-		// console.log("przycisk");
-		if (imageOK()) {
-			const possibleError = await downloadImg(currImg, e.altKey); // downloadId
-			if (typeof possibleError === "string") { // error occurred, alt: !Number.isFinite(possibleError)
-				alert(possibleError);
-				return;
-			}
-			// if (singleImageSite) window.close(); // Nie działa bo "Scripts may close only the windows that were opened by them."
-			if (singleImageSite) chrome.runtime.sendMessage({ closeThis: true });
-		}
+		downloadImgOuter(e.altKey);
 	});
 	document.body.appendChild(przycisk);
 
@@ -142,10 +154,9 @@ if (czy_wyłączyć_rozszerzenie === false && document.documentElement.tagName =
 	function LeftMid (imgRect) { return clamp(imgRect.left + imgRect.width/2 - rozmiar_przycisku/2  , 0, document.documentElement.clientWidth  - rozmiar_przycisku) + "px"; }
 	function Right   (imgRect) { return clamp(document.documentElement.clientWidth - imgRect.right  , 0, document.documentElement.clientWidth  - rozmiar_przycisku) + "px"; }
 	/* eslint-enable */
-	let setPrzyciskPositionHelper;
-	setPrzyciskPositionHelper = imgRect0 => {
+	let setPrzyciskPositionHelper = imgRect0 => {
 		setPrzyciskPositionHelper = (() => {
-			switch (pozycja_przycisku_idx = pozycja_przycisku.findIndex(el => el === 1)) {
+			switch (pozycja_przycisku.findIndex(el => el)) { // znajdź pierwszy element co castuje się na true
 				default:
 				case 0: return imgRect => {
 					przycisk.style.left = Left(imgRect);
@@ -254,4 +265,4 @@ if (czy_wyłączyć_rozszerzenie === false && document.documentElement.tagName =
 	}
 
 	const ID_t2 = performance.now(); console.log(`Ideal Download loaded in ${(ID_t2 - ID_t1).toFixed(1)} ms!`);
-}
+})();

@@ -140,6 +140,16 @@ let automatyczne_zamykanie_kart = true;
 let obejście_długości_nawigacji = hostIncludes("e926.net", "e621.net");
 
 /*
+	Jeżeli ustawione na true i automatyczne_zamykanie_kart też jest true to wtedy obrazy otwarte w nowej karcie (z czarnym tłem) zostaną automatycznie pobrane a karta po tym zamnkięta.
+	Jeżeli obejście_długości_nawigacji też jest true to gdy klikniemy na obraz to karta się zamknie - to może być nieporządany efekt dlatego należy uważać co mamy w obejście_długości_nawigacji gdy dodajemy coś tutaj.
+
+	Przykładowe wartości:
+	let automatyczne_pobieranie_w_nowej_karcie = false; // Domyślnie
+	let automatyczne_pobieranie_w_nowej_karcie = host("example1.com","example2.com"); // Czytać jako: "Po otwarciu obrazu w nowej karcie na tych domenach obraz zostanie pobrany a karta zamknięta" (whitelist)
+*/
+let automatyczne_pobieranie_w_nowej_karcie = hostIncludes("e926.net", "e621.net", "cdn.discordapp.com");
+
+/*
 	Jeżeli ustawione na true to zostanie użyta bardziej wymagająca obliczeniowo metoda mousemove która wysyła event wiele razy na sekundę gdy rusza się mysz.
 	Należy jej przynajmniej spróbować gdy domyślna metoda (bazująca na mouseenter i mouseleave) nie działa.
 	mouseenter i mouseleave nie działają jeżeli obraz jest przykryty jakimś innym elementem.
