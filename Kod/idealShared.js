@@ -108,7 +108,7 @@ function blobToBase64(blob) {
 		};
 	});
 }
-const hostname = typeof window !== "undefined" && window.location.hostname;
+const hostname = typeof window !== "undefined" ? window.location.hostname : ""; // necessary because of "use strict"
 function host(...strList) {
 	for (const daElem of strList) {
 		if (hostname === daElem) {

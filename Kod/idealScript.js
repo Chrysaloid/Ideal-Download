@@ -1,5 +1,6 @@
-"use strict";
+/// <reference path="idealShared.js"/>
 /// <reference path="../Konfiguracja.js"/>
+"use strict";
 (() => {
 	if (czy_wyłączyć_rozszerzenie || document.documentElement.tagName !== "HTML") return;
 
