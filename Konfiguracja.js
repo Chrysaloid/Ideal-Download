@@ -154,7 +154,7 @@ let automatyczne_pobieranie_w_nowej_karcie = hostIncludes("e926.net", "e621.net"
 	Należy jej przynajmniej spróbować gdy domyślna metoda (bazująca na mouseenter i mouseleave) nie działa.
 	mouseenter i mouseleave nie działają jeżeli obraz jest przykryty jakimś innym elementem.
 */
-let użyj_metody_mousemove = host("allegro.pl", "www.instagram.com");
+let użyj_metody_mousemove = host("allegro.pl", "www.instagram.com", "pl.aliexpress.com", "aliexpress.com");
 
 /*
 	Zmienianie wartości domyślnych dla konkretnych stron. Domyślnie nie zmienione.

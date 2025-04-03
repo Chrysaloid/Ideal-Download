@@ -1,6 +1,9 @@
 "use strict";
 const ID_t1 = performance.now();
 
+String.prototype.specialTrim = function () {
+	return this.replaceAll(/^[\x00-\x20\x7F-\xA0]+|[\x00-\x20\x7F-\xA0]+$/g, "");
+};
 let dateFormatter;
 function getDateFormatter() {
 	return new Intl.DateTimeFormat("af", {
@@ -53,16 +56,16 @@ function determineFileName(dataUrl, obj) {
 	// debugger;
 	let fileName, pos, altOrTitle;
 	let nazwa = (() => {
-		altOrTitle = obj.imgAlt.trim();   if (altOrTitle.length) return altOrTitle;
-		altOrTitle = obj.imgTitle.trim(); if (altOrTitle.length) return altOrTitle;
+		altOrTitle = obj.imgAlt.specialTrim();   if (altOrTitle.length) return altOrTitle;
+		altOrTitle = obj.imgTitle.specialTrim(); if (altOrTitle.length) return altOrTitle;
 
 		[fileName, pos] = getFileNameFromPathname(obj.imgSrc);
-		if (fileName !== null && fileName !== "") return getNameFromFileName(fileName, pos);
+		if (fileName?.length) return getNameFromFileName(fileName, pos);
 
 		dateFormatter ??= getDateFormatter();
 
 		return "Unknown " + dateFormatter.format(new Date()).replaceAll(":", "꞉");
-	})().trim().replaceAll(/[\\\/:*?"<>|\n\r]/gm, "_"); // eslint-disable-line no-useless-escape
+	})().specialTrim().replaceAll(/[\\\/:*?"<>|\n\r]/gm, "_"); // eslint-disable-line no-useless-escape
 
 	nazwa += (() => { // extension
 		const imgForm = (() => {
