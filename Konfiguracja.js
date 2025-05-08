@@ -147,7 +147,7 @@ let obejście_długości_nawigacji = hostIncludes("e926.net", "e621.net");
 	let automatyczne_pobieranie_w_nowej_karcie = false; // Domyślnie
 	let automatyczne_pobieranie_w_nowej_karcie = host("example1.com","example2.com"); // Czytać jako: "Po otwarciu obrazu w nowej karcie na tych domenach obraz zostanie pobrany a karta zamknięta" (whitelist)
 */
-let automatyczne_pobieranie_w_nowej_karcie = hostIncludes("e926.net", "e621.net", "cdn.discordapp.com");
+let automatyczne_pobieranie_w_nowej_karcie = hostIncludes("e926.net", "e621.net", "cdn.discordapp.com", "media.discordapp.net");
 
 /*
 	Jeżeli ustawione na true to zostanie użyta bardziej wymagająca obliczeniowo metoda mousemove która wysyła event wiele razy na sekundę gdy rusza się mysz.
