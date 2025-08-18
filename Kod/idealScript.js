@@ -219,6 +219,7 @@
 
 			przycisk.classList.remove("kursor-nad-obrazem", "zły-rozmiar");
 			const elemArr = document.elementsFromPoint(e.clientX, e.clientY);
+			// console.log(elemArr);
 			for (let i = 0; i < elemArr.length; i++) { // Image did not fail to load
 				if (elemArr[i].tagName === "IMG" && (this.naturalWidth > 0 || !this.complete)) {
 					currImg = elemArr[i];
@@ -236,6 +237,7 @@
 		function imgEnter(e) { //                                  Image failed to load
 			if ((e.fromElement === przycisk && this === currImg) || (this.naturalWidth === 0 && this.complete)) return;
 			currImg = this;
+			// console.log(currImg);
 			const imgRect = setPrzyciskPosition();
 			if (imgRect.width < minimalny_rozmiar_obrazu && imgRect.height < minimalny_rozmiar_obrazu) przycisk.classList.add("zły-rozmiar");
 			if (e.ctrlKey) { bod.add(klawCtrl) } else { bod.remove(klawCtrl) }
