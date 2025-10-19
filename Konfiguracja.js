@@ -159,7 +159,7 @@ let użyj_metody_mousemove = host("allegro.pl", "www.instagram.com", "pl.aliexpr
 /*
 	Zmienianie wartości domyślnych dla konkretnych stron. Domyślnie nie zmienione.
 	Zalecam konstrukcję "if else if". W każdym bloku można zmienić każdą z domyślnych wartości.
-	Można użyć tej formy zamiast pisania reguł dla boolowskich zmiennych w ich liniach aby np. poprawić przejrzystość i nie sprawdzać tej samej domeny 2 razy
+	Można użyć tej formy zamiast pisania reguł dla boolowskich zmiennych w ich liniach aby np. poprawić przejrzystość i nie sprawdzać tej samej domeny 2 razy.
 	Możliwości detekcji stron takie same jak w przypadku głównego wyłącznika.
 	Poniższy kod należy skopiować poza komentarz i tam go edytować.
 

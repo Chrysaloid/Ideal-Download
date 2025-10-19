@@ -53,7 +53,6 @@ async function isWebpAnimated(resp) {
 	return false;
 }
 function determineFileName(dataUrl, obj) {
-	// debugger;
 	let fileName, pos, altOrTitle;
 	let nazwa = (() => {
 		altOrTitle = obj.imgAlt.specialTrim();   if (altOrTitle.length) return altOrTitle;
@@ -97,8 +96,6 @@ function determineFileName(dataUrl, obj) {
 		}
 		/* eslint-enable */
 	})();
-
-	// console.log(nazwa);
 
 	return nazwa;
 }
