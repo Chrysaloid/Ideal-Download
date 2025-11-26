@@ -20,6 +20,28 @@
 			"resources": ["Kod/icon_128.png"]
 		}
 	],
-	"permissions": ["scripting", "nativeMessaging", "downloads", "webRequest"],
-	"host_permissions": ["<all_urls>"]
+	"permissions": [
+		"scripting",
+		"nativeMessaging",
+		"downloads",
+		"webRequest",
+		"declarativeNetRequest",
+		"declarativeNetRequestFeedback"
+	],
+	"host_permissions": ["<all_urls>"],
+	"declarative_net_request": {
+		"rule_resources": [
+			{
+				"//": "Does not work",
+				"id": "img",
+				"enabled": false,
+				"path": "Kod/IMG-download-rule.json"
+			},
+			{
+				"id": "cache",
+				"enabled": false,
+				"path": "Kod/long-term-cache-rule.json"
+			}
+		]
+	}
 }

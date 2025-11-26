@@ -52,7 +52,7 @@ async function isWebpAnimated(resp) {
 	}
 	return false;
 }
-function determineFileName(dataUrl, obj) {
+function determineFileName(obj) {
 	let fileName, pos, altOrTitle;
 	let nazwa = (() => {
 		altOrTitle = obj.imgAlt.specialTrim();   if (altOrTitle.length) return altOrTitle;
@@ -68,11 +68,6 @@ function determineFileName(dataUrl, obj) {
 
 	nazwa += (() => { // extension
 		const imgForm = (() => {
-			if (obj.czyWebpAnim) return "webpAnim";
-			if (obj.blobType !== undefined && obj.blobType.startsWith("image/")) {
-				// 6 === "image/".length
-				return obj.blobType.slice(6);
-			}
 			if (fileName !== null) {
 				if (fileName !== undefined) return getExtFromFileName(fileName, pos);
 				[fileName, pos] = getFileNameFromPathname(obj.imgSrc);
@@ -81,18 +76,19 @@ function determineFileName(dataUrl, obj) {
 		})();
 		/* eslint-disable */
 		switch (imgForm) {
-			case "jpeg"    : return obj.altKey ? ".png"  : ".jpg";
-			case "png"     : return obj.altKey ? ".jpg"  : ".png";
-			case "gif"     : return obj.altKey ? ".apng" : ".gif";
-			default        :
-			case "webp"    : if (obj.altKey) { modifyDataUrl(dataUrl, "jpeg"); return ".jpg" } else { modifyDataUrl(dataUrl, "png" ); return ".png" }
-			case "webpAnim":
-			case "apng"    : if (obj.altKey) { modifyDataUrl(dataUrl, "apng"); return ".apng" } else { modifyDataUrl(dataUrl, "gif" ); return ".gif" }
-			case "jfif"    :
-			case "bmp"     :
-			case "heic"    :
-			case "tiff"    : if (obj.altKey) { modifyDataUrl(dataUrl, "png"); return ".png" } else { modifyDataUrl(dataUrl, "jpeg" ); return ".jpg" }
-			case "svg+xml" : return ".svg";
+			case "jpg"      :
+			case "jpg_large":
+			case "jpeg"     : return ".jpg";
+			case "png"      : return ".png";
+			case "gif"      : return ".gif";
+			default         :
+			case "webp"     : return ".png";
+			case "apng"     : return ".gif";
+			case "jfif"     :
+			case "bmp"      :
+			case "heic"     :
+			case "tiff"     : return ".jpg";
+			case "svg+xml"  : return ".svg";
 		}
 		/* eslint-enable */
 	})();

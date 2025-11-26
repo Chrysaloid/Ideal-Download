@@ -12,31 +12,12 @@
 	function clamp(num, min, max) {
 		return Math.min(Math.max(num, min), max);
 	}
-	async function downloadImg(img, altKey) {
-		try {
-			const resp = await fetch(img.currentSrc);
-			respOK(resp);
-			const blob = await resp.clone().blob();
-			const dataUrl = await blobToBase64(blob);
-			return chrome.runtime.sendMessage({
-				imgSrc: img.currentSrc,
-				imgAlt: img.alt,
-				imgTitle: img.title,
-				altKey: altKey,
-				czyPobrać: true,
-				dataUrl: dataUrl,
-				blobType: blob.type,
-				czyWebpAnim: blob.type === "image/webp" && await isWebpAnimated(resp),
-			});
-		} catch (err) {
-			return chrome.runtime.sendMessage({
-				imgSrc: img.currentSrc,
-				imgAlt: img.alt,
-				imgTitle: img.title,
-				altKey: altKey,
-				czyPobrać: false,
-			});
-		}
+	async function downloadImg(img) {
+		return chrome.runtime.sendMessage({
+			imgSrc: img.currentSrc,
+			imgAlt: img.alt,
+			imgTitle: img.title,
+		});
 	}
 
 	/*
@@ -73,9 +54,9 @@
 			return false;
 		}
 	}
-	async function downloadImgOuter(altKey = false) {
+	async function downloadImgOuter() {
 		if (imageOK()) {
-			const possibleError = await downloadImg(currImg, altKey); // downloadId
+			const possibleError = await downloadImg(currImg); // downloadId
 			if (typeof possibleError === "string") { // error occurred, alt: !Number.isFinite(possibleError)
 				alert(possibleError);
 				return false;
@@ -104,7 +85,7 @@
 	przycisk.addEventListener("mouseleave", e => { if (e.toElement !== currImg) { przycisk.classList.remove("kursor-nad-obrazem", "zły-rozmiar") } });
 	przycisk.addEventListener("click", e => {
 		e.stopPropagation();
-		downloadImgOuter(e.altKey);
+		downloadImgOuter();
 	});
 	document.body.appendChild(przycisk);
 
