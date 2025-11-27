@@ -38,8 +38,9 @@
 				"path": "Kod/IMG-download-rule.json"
 			},
 			{
+				"//": "Does not stop chrome.downloads.download from downloading files again but the site loads a bit faster",
 				"id": "cache",
-				"enabled": false,
+				"enabled": true,
 				"path": "Kod/long-term-cache-rule.json"
 			}
 		]

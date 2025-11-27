@@ -1,6 +1,7 @@
 "use strict";
 const ID_t1 = performance.now();
 
+const log = console.log;
 String.prototype.specialTrim = function () {
 	return this.replaceAll(/^[\x00-\x20\x7F-\xA0]+|[\x00-\x20\x7F-\xA0]+$/g, "");
 };
@@ -44,6 +45,9 @@ function respOK(resp) {
 	} else {
 		throw new Error(`Error occurred while downloading image. Network response was not OK. Status: ${resp.status}`);
 	}
+}
+function sleep(ms) {
+	return new Promise(resolve => setTimeout(resolve, ms)); // eslint-disable-line no-promise-executor-return
 }
 async function isWebpAnimated(resp) {
 	const buffer = new Uint8Array(await resp.arrayBuffer());

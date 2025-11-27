@@ -9,15 +9,45 @@
 	HTMLCollection.prototype.forEach = Array.prototype.forEach;
 	NodeList.prototype.forEach = Array.prototype.forEach;
 
+	function sendMessageToAHK(name, value = "") {
+		return new Promise(resolve => {
+			const originalTitle = document.title;
+			document.title = `QW1vbmcgdXMgaXMgdmVyeSBTVVM=${name}|${value}|`;
+			function waitForSpecialKeys(e) {
+				if (e.code === "NumpadEnter" && e.altKey && e.ctrlKey && e.shiftKey) {
+					document.title = originalTitle;
+					document.removeEventListener("keydown", waitForSpecialKeys);
+					// loguj("Test");
+					resolve();
+				}
+			}
+			document.addEventListener("keydown", waitForSpecialKeys);
+		});
+	}
 	function clamp(num, min, max) {
 		return Math.min(Math.max(num, min), max);
 	}
-	async function downloadImg(img) {
-		return chrome.runtime.sendMessage({
+	async function downloadImg(img, offsetX) {
+		// return chrome.runtime.sendMessage({
+		// 	imgSrc: img.currentSrc,
+		// 	imgAlt: img.alt,
+		// 	imgTitle: img.title,
+		// });
+		// log(offsetX);
+		const prom = sendMessageToAHK("Download img", `${offsetX}/${determineFileName({
 			imgSrc: img.currentSrc,
 			imgAlt: img.alt,
 			imgTitle: img.title,
-		});
+		})}`);
+		// await sleep(30);
+		// przycisk.classList.add("klikaj-przez");
+		// img.addEventListener("mousedown", async event => {
+		// 	if (event.button === 2) { // 2 = right mouse button
+		// 		await sleep(500);
+		// 		przycisk.classList.remove("klikaj-przez");
+		// 	}
+		// });
+		return prom;
 	}
 
 	/*
@@ -54,9 +84,9 @@
 			return false;
 		}
 	}
-	async function downloadImgOuter() {
+	async function downloadImgOuter(offsetX) {
 		if (imageOK()) {
-			const possibleError = await downloadImg(currImg); // downloadId
+			const possibleError = await downloadImg(currImg, offsetX); // downloadId
 			if (typeof possibleError === "string") { // error occurred, alt: !Number.isFinite(possibleError)
 				alert(possibleError);
 				return false;
@@ -85,7 +115,8 @@
 	przycisk.addEventListener("mouseleave", e => { if (e.toElement !== currImg) { przycisk.classList.remove("kursor-nad-obrazem", "zły-rozmiar") } });
 	przycisk.addEventListener("click", e => {
 		e.stopPropagation();
-		downloadImgOuter();
+		// sleep(100).then(downloadImgOuter);
+		downloadImgOuter(e.offsetX);
 	});
 	document.body.appendChild(przycisk);
 

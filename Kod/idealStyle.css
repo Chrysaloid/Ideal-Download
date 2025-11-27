@@ -15,4 +15,5 @@
 	&.kursor-nad-obrazem { display: block; }
 	&.zły-rozmiar, &.nie-pokazuj-przycisku { display: none; }
 	.klawisz-kontrol &.kursor-nad-obrazem { display: block; }
+	&.klikaj-przez { pointer-events: none; }
 }
