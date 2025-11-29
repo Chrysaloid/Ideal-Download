@@ -1,4 +1,5 @@
-﻿/* eslint-disable prefer-const */
+﻿/// <reference path="Kod/idealShared.js"/>
+/* eslint-disable prefer-const */
 "use strict";
 
 /* ----- Instrukcja instalacji ----- */

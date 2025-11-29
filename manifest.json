@@ -8,8 +8,13 @@
 	"content_scripts": [
 		{
 			"matches": ["<all_urls>"],
-			"js": ["Kod/idealShared.js","Konfiguracja.js","Kod/idealScript.js"],
+			"js": ["Kod/idealShared.js","Konfiguracja.js","Kod/idealStart.js"],
 			"css": ["Kod/idealStyle.css"],
+			"run_at": "document_start"
+		},
+		{
+			"matches": ["<all_urls>"],
+			"js": ["Kod/idealScript.js"],
 			"run_at": "document_end"
 		}
 	],
@@ -25,6 +30,7 @@
 		"nativeMessaging",
 		"downloads",
 		"webRequest",
+		"notifications",
 		"declarativeNetRequest",
 		"declarativeNetRequestFeedback"
 	],
@@ -39,8 +45,9 @@
 			},
 			{
 				"//": "Does not stop chrome.downloads.download from downloading files again but the site loads a bit faster",
+				"//": "Replaced with dynamic rules loaded by idealBackground.js",
 				"id": "cache",
-				"enabled": true,
+				"enabled": false,
 				"path": "Kod/long-term-cache-rule.json"
 			}
 		]

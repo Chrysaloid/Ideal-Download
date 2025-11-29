@@ -1,10 +1,13 @@
 /// <reference path="idealShared.js"/>
 /// <reference path="../Konfiguracja.js"/>
+/// <reference path="idealStart.js"/>
 "use strict";
 (() => {
 	if (czy_wyłączyć_rozszerzenie || document.documentElement.tagName !== "HTML") return;
 
-	let currImg, przycisk, singleImage, singleImageSite;
+	let currImg, przycisk;
+
+	const closeTab = automatyczne_zamykanie_kart && newTab && singleImageSite;
 
 	HTMLCollection.prototype.forEach = Array.prototype.forEach;
 	NodeList.prototype.forEach = Array.prototype.forEach;
@@ -17,6 +20,7 @@
 			imgSrc: img.currentSrc,
 			imgAlt: img.alt,
 			imgTitle: img.title,
+			closeThis: closeTab,
 		});
 	}
 
@@ -58,28 +62,18 @@
 		if (imageOK()) {
 			const possibleError = await downloadImg(currImg); // downloadId
 			if (typeof possibleError === "string") { // error occurred, alt: !Number.isFinite(possibleError)
-				alert(possibleError);
+				// alert(possibleError);
 				return false;
 			}
-			// if (singleImageSite) window.close(); // Nie działa bo "Scripts may close only the windows that were opened by them."
-			if (singleImageSite) chrome.runtime.sendMessage({ closeThis: true });
 			return true;
 		} else {
 			return false;
 		}
 	}
 
-	singleImageSite = (
-		automatyczne_zamykanie_kart &&
-		(obejście_długości_nawigacji || history.length === 1 || (history.length === 2 && document.referrer === "")) && // nowa karta
-		(singleImage = document.querySelector(`body>img:only-child`)) !== null
-	);
-	if (singleImageSite) {
-		if (automatyczne_pobieranie_w_nowej_karcie) {
-			currImg = singleImage;
-			if (downloadImgOuter()) return;
-		}
-		document.title += " | Single image site";
+
+	if (closeTab) {
+		document.title += " | Single image site"; // for AHK
 	}
 	przycisk = document.createElement("div");
 	przycisk.classList.add("przycisk-do-pobierania-obrazów");
@@ -210,5 +204,5 @@
 		}).observe(document.body, { childList: true, subtree: true });
 	}
 
-	const ID_t2 = performance.now(); console.log(`Ideal Download loaded in ${(ID_t2 - ID_t1).toFixed(1)} ms!`);
+	const ID_t2 = performance.now(); log(`Ideal Download loaded in ${(ID_t2 - ID_t1).toFixed(1)} ms!`);
 })();

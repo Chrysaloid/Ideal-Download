@@ -59,8 +59,8 @@ async function isWebpAnimated(resp) {
 function determineFileName(obj) {
 	let fileName, pos, altOrTitle;
 	let nazwa = (() => {
-		altOrTitle = obj.imgAlt.specialTrim();   if (altOrTitle.length) return altOrTitle;
-		altOrTitle = obj.imgTitle.specialTrim(); if (altOrTitle.length) return altOrTitle;
+		altOrTitle = obj.imgAlt?.specialTrim();   if (altOrTitle?.length) return altOrTitle;
+		altOrTitle = obj.imgTitle?.specialTrim(); if (altOrTitle?.length) return altOrTitle;
 
 		[fileName, pos] = getFileNameFromPathname(obj.imgSrc);
 		if (fileName?.length) return getNameFromFileName(fileName, pos);
