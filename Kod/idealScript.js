@@ -43,7 +43,7 @@
 		/* eslint-enable */
 	];
 	function imageOK() {
-		if (currImg.currentSrc.trim()) {
+		if (currImg.currentSrc?.trim()) {
 			return true;
 		} else {
 			for (const point of getPoint) {
@@ -192,13 +192,16 @@
 		}
 
 		document.body.getElementsByTagName("img").forEach(przygotujObraz);
+		// document.body.getElementsByTagName("picture").forEach(przygotujObraz);
 
 		new MutationObserver(mutRecArr => {
 			mutRecArr.forEach(mutRec => {
 				mutRec.addedNodes.forEach(node => {
 					if (node.tagName === "IMG") { przygotujObraz(node); return }
+					// if (node.tagName === "PICTURE") { przygotujObraz(node); return }
 					if (node.tagName === undefined) return; // node is a Node and not an Element
 					node.getElementsByTagName("img").forEach(przygotujObraz);
+					// node.getElementsByTagName("picture").forEach(przygotujObraz);
 				});
 			});
 		}).observe(document.body, { childList: true, subtree: true });
