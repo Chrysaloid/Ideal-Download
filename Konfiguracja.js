@@ -1,4 +1,4 @@
-/// <reference path="Kod/idealShared.js"/>
+﻿/// <reference path="Kod/idealShared.js"/>
 /* eslint-disable prefer-const */
 "use strict";
 
@@ -157,6 +157,12 @@ let automatyczne_pobieranie_w_nowej_karcie = hostIncludes("e926.net", "e621.net"
 */
 let użyj_metody_mousemove = host("allegro.pl", "www.instagram.com", "pl.aliexpress.com", "aliexpress.com"); // , "www.redbubble.com"
 
+/*
+	Jeżeli ustawione na true to jeżeli w docelowej lokalizacji (zazwyczaj jest to folder "Pobrane")
+	już istnieje plik o takiej samej nazwie to zostanie on nadpisany i nie zostanie utworzony nowy
+	plik. Zapobiega to powstawawniu dużej liczby duplikatów.
+*/
+let nadpisz_istniejący_plik = true;
 /*
 	Zmienianie wartości domyślnych dla konkretnych stron. Domyślnie nie zmienione.
 	Zalecam konstrukcję "if else if". W każdym bloku można zmienić każdą z domyślnych wartości.

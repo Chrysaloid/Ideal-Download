@@ -8,6 +8,7 @@ chrome.runtime.onMessage.addListener(async function (req, sender, sendResp) {
 		sendResp(await chrome.downloads.download({
 			filename: determineFileName(req),
 			url: req.imgSrc,
+			conflictAction: req.conflictAction ?? "uniquify",
 		}));
 		if (req.closeThis) chrome.tabs.remove(sender.tab.id);
 	} catch (err) {

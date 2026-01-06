@@ -8,6 +8,7 @@
 	let currImg, przycisk;
 
 	const closeTab = automatyczne_zamykanie_kart && newTab && singleImageSite;
+	const conflictAction = nadpisz_istniejący_plik ? "overwrite" : "uniquify"; // https://developer.chrome.com/docs/extensions/reference/api/downloads#type-FilenameConflictAction
 
 	HTMLCollection.prototype.forEach = Array.prototype.forEach;
 	NodeList.prototype.forEach = Array.prototype.forEach;
@@ -21,6 +22,7 @@
 			imgAlt: img.alt,
 			imgTitle: img.title,
 			closeThis: closeTab,
+			conflictAction: conflictAction,
 		});
 	}
 
