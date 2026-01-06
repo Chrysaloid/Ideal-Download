@@ -1,4 +1,4 @@
-﻿/// <reference path="Kod/idealShared.js"/>
+/// <reference path="Kod/idealShared.js"/>
 /* eslint-disable prefer-const */
 "use strict";
 
