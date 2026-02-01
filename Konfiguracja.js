@@ -155,7 +155,7 @@ let automatyczne_pobieranie_w_nowej_karcie = hostIncludes("e926.net", "e621.net"
 	Należy jej przynajmniej spróbować gdy domyślna metoda (bazująca na mouseenter i mouseleave) nie działa.
 	mouseenter i mouseleave nie działają jeżeli obraz jest przykryty jakimś innym elementem.
 */
-let użyj_metody_mousemove = host("allegro.pl", "www.instagram.com", "pl.aliexpress.com", "aliexpress.com"); // , "www.redbubble.com"
+let użyj_metody_mousemove = host("allegro.pl", "www.instagram.com", "pl.aliexpress.com", "aliexpress.com", "thenounproject.com"); // , "www.redbubble.com"
 
 /*
 	Jeżeli ustawione na true to jeżeli w docelowej lokalizacji (zazwyczaj jest to folder "Pobrane")

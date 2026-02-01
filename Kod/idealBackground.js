@@ -3,15 +3,15 @@
 
 importScripts("idealShared.js");
 
-chrome.runtime.onMessage.addListener(async function (req, sender, sendResp) {
-	try {
-		sendResp(await chrome.downloads.download({
-			filename: determineFileName(req),
-			url: req.imgSrc,
-			conflictAction: req.conflictAction ?? "uniquify",
-		}));
+chrome.runtime.onMessage.addListener(function (req, sender, sendResp) {
+	chrome.downloads.download({
+		filename: determineFileName(req),
+		url: req.imgSrc,
+		conflictAction: req.conflictAction ?? "uniquify",
+	}).then(result => {
+		sendResp(result);
 		if (req.closeThis) chrome.tabs.remove(sender.tab.id);
-	} catch (err) {
+	}).catch(err => {
 		sendResp(err.message);
 		chrome.notifications.create({
 			type: "basic",
@@ -19,7 +19,7 @@ chrome.runtime.onMessage.addListener(async function (req, sender, sendResp) {
 			message: err.message,
 			iconUrl: chrome.runtime.getURL("Kod/icon_128.png"),
 		});
-	}
+	});
 
 	return true;
 });
