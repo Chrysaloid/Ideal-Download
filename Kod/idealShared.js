@@ -1,5 +1,4 @@
 "use strict";
-const ID_t1 = performance.now();
 
 const log = console.log;
 String.prototype.specialTrim = function () {

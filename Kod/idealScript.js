@@ -3,6 +3,7 @@
 /// <reference path="idealStart.js"/>
 "use strict";
 (() => {
+	const ID_t1 = performance.now();
 	if (czy_wyłączyć_rozszerzenie || document.documentElement.tagName !== "HTML") return;
 
 	let currImg, przycisk;
