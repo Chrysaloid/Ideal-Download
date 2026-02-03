@@ -40,10 +40,11 @@ chrome.runtime.onInstalled.addListener(() => {
 });
 
 chrome.runtime.onMessage.addListener(function (req, sender, sendResp) {
+	const url = new URL(req.imgSrc);
+	delete req.imgSrc;
+	url.searchParams.set("mySpecialParam", btoa(JSON.stringify(req)));
 	chrome.downloads.download({
-		filename: determineFileName(req),
-		url: req.imgSrc,
-		conflictAction: req.conflictAction ?? "uniquify",
+		url: url.href,
 	}).then(result => {
 		sendResp(result);
 		if (req.closeThis) chrome.tabs.remove(sender.tab.id);
@@ -58,4 +59,18 @@ chrome.runtime.onMessage.addListener(function (req, sender, sendResp) {
 	});
 
 	return true;
+});
+
+chrome.downloads.onDeterminingFilename.addListener((item, suggest) => {
+	log(item.byExtensionName || "Empty");
+	if	(item.byExtensionName === "Ideal Download" || item.byExtensionName === "JS + CSS Injector") {
+		const mySpecialParam = new URL(item.url).searchParams.get("mySpecialParam");
+		if (mySpecialParam) {
+			const req = JSON.parse(atob(mySpecialParam));
+			req.imgSrc = item.url;
+			const filename = determineFileName(req);
+			const conflictAction = req.conflictAction ?? "overwrite";
+			suggest({ filename, conflictAction });
+		}
+	}
 });
