@@ -44,12 +44,6 @@ chrome.runtime.onMessage.addListener(function (req, sender, sendResp) {
 		filename: determineFileName(req),
 		url: req.imgSrc,
 		conflictAction: req.conflictAction ?? "uniquify",
-		headers: [
-			{
-				name: "X-Change-Extension",
-				value: "true",
-			},
-		],
 	}).then(result => {
 		sendResp(result);
 		if (req.closeThis) chrome.tabs.remove(sender.tab.id);

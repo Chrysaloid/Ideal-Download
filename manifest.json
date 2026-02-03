@@ -51,8 +51,9 @@
 				"path": "Kod/long-term-cache-rule.json"
 			},
 			{
+				"//": "chrome.declarativeNetRequest cannot see downloads from chrome.downloads.download()",
 				"id": "modify-img-download-headers",
-				"enabled": true,
+				"enabled": false,
 				"path": "Kod/modify-img-download-headers.json"
 			}
 		]
