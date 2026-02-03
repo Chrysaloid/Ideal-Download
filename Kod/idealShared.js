@@ -79,18 +79,18 @@ function determineFileName(obj) {
 		})();
 		/* eslint-disable */
 		switch (imgForm) {
-			case "jpg"      :
 			case "jpg_large":
-			case "jpeg"     : return ".jpg";
-			case "png"      : return ".png";
-			case "gif"      : return ".gif";
-			default         :
-			case "webp"     : return ".png";
-			case "apng"     : return ".gif";
+			case "jpeg"     :
 			case "jfif"     :
 			case "bmp"      :
 			case "heic"     :
-			case "tiff"     : return ".jpg";
+			case "tiff"     :
+			case "jpg"      : return ".jpg";
+			case "webp"     :
+			default         :
+			case "png"      : return ".png";
+			case "apng"     :
+			case "gif"      : return ".gif";
 			case "svg+xml"  : return ".svg";
 		}
 		/* eslint-enable */
