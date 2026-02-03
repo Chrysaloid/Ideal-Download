@@ -1,6 +1,6 @@
 [
 	{
-		"id": 1,
+		"id": 2,
 		"priority": 1,
 		"condition": {
 			"urlFilter": "||files.catbox.moe^",
