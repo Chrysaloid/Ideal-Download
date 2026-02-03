@@ -3,11 +3,53 @@
 
 importScripts("idealShared.js");
 
+chrome.runtime.onInstalled.addListener(() => {
+	// Long term cache net rules for images for some domains
+	chrome.declarativeNetRequest.getDynamicRules().then(oldRules => {
+		chrome.declarativeNetRequest.updateDynamicRules({
+			removeRuleIds: oldRules.map(rule => rule.id),
+			addRules: [
+				"files.catbox.moe",
+				"static*.e621.net",
+				"static*.e926.net",
+				"cdn.discordapp.com",
+				"media.discordapp.net",
+				"media*.tenor.com",
+			].map((domain, index) => ({
+				id: index + 1,
+				priority: 1,
+				condition: {
+					urlFilter: `||${domain}^`,
+					resourceTypes: ["image", "main_frame", "sub_frame", "other"],
+					responseHeaders: [{
+						header: "Content-Type",
+						values: ["*image/*"],
+					}],
+				},
+				action: {
+					type: "modifyHeaders",
+					responseHeaders: [{
+						header: "Cache-Control",
+						operation: "set",
+						value: "public, max-age=31536000, immutable", // one year cache
+					}],
+				},
+			})),
+		});
+	});
+});
+
 chrome.runtime.onMessage.addListener(function (req, sender, sendResp) {
 	chrome.downloads.download({
 		filename: determineFileName(req),
 		url: req.imgSrc,
 		conflictAction: req.conflictAction ?? "uniquify",
+		headers: [
+			{
+				name: "X-Change-Extension",
+				value: "true",
+			},
+		],
 	}).then(result => {
 		sendResp(result);
 		if (req.closeThis) chrome.tabs.remove(sender.tab.id);
@@ -23,43 +65,3 @@ chrome.runtime.onMessage.addListener(function (req, sender, sendResp) {
 
 	return true;
 });
-
-// Long term cache net rules for images for some domains
-chrome.declarativeNetRequest.getDynamicRules().then(oldRules => {
-	chrome.declarativeNetRequest.updateDynamicRules({
-		removeRuleIds: oldRules.map(rule => rule.id),
-		addRules: [
-			"files.catbox.moe",
-			"static*.e621.net",
-			"static*.e926.net",
-			"cdn.discordapp.com",
-			"media.discordapp.net",
-			"media*.tenor.com",
-		].map((domain, index) => ({
-			id: index + 1,
-			priority: 1,
-			condition: {
-				urlFilter: `||${domain}^`,
-				resourceTypes: ["image", "main_frame", "sub_frame", "other"],
-				responseHeaders: [{
-					header: "Content-Type",
-					values: ["*image/*"],
-				}],
-			},
-			action: {
-				type: "modifyHeaders",
-				responseHeaders: [{
-					header: "Cache-Control",
-					operation: "set",
-					value: "public, max-age=31536000, immutable", // one year cache
-				}],
-			},
-		})),
-	});
-});
-
-// sleep(1000).then(() => log(new Date()));
-
-// Nie wiem kiedy to się uruchamia :/
-// chrome.runtime.onStartup.addListener(() => {
-// });

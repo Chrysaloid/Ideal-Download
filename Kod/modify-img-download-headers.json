@@ -1,0 +1,27 @@
+[
+	{
+		"id": 3,
+		"priority": 1,
+		"condition": {
+			"resourceTypes": ["image"],
+			"urlFilter": "|http",
+			"requestMethods": ["get"],
+			"requestHeaders": [
+				{
+					"header": "X-Change-Extension",
+					"value": "true"
+				}
+			]
+		},
+		"action": {
+    		"type": "modifyHeaders",
+			"responseHeaders": [
+				{
+					"header": "Content-Type",
+					"operation": "set",
+					"value": "application/octet-stream"
+				}
+			]
+		}
+	}
+]

@@ -15,7 +15,7 @@
 		{
 			"matches": ["<all_urls>"],
 			"js": ["Kod/idealScript.js"],
-			"run_at": "document_end"
+			"run_at": "document_idle"
 		}
 	],
 	"background": {"service_worker": "Kod/idealBackground.js"},
@@ -39,7 +39,7 @@
 		"rule_resources": [
 			{
 				"//": "Does not work",
-				"id": "img",
+				"id": "IMG",
 				"enabled": false,
 				"path": "Kod/IMG-download-rule.json"
 			},
@@ -49,6 +49,11 @@
 				"id": "cache",
 				"enabled": false,
 				"path": "Kod/long-term-cache-rule.json"
+			},
+			{
+				"id": "modify-img-download-headers",
+				"enabled": true,
+				"path": "Kod/modify-img-download-headers.json"
 			}
 		]
 	}
