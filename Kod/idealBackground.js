@@ -15,6 +15,7 @@ chrome.runtime.onInstalled.addListener(() => {
 				"cdn.discordapp.com",
 				"media.discordapp.net",
 				"media*.tenor.com",
+				"cards.scryfall.io",
 			].map((domain, index) => ({
 				id: index + 1,
 				priority: 1,
