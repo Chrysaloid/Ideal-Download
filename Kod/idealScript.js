@@ -74,7 +74,6 @@
 		}
 	}
 
-
 	if (closeTab) {
 		document.title += " | Single image site"; // for AHK
 	}
